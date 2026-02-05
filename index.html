@@ -1,82 +1,90 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>INFEKSI-0</title>
-  <style>
-    body {
-      background: #0b0b0b;
-      color: #e0e0e0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<title>INFEKSI-0</title>
 
-    h1 { color: crimson; }
+<style>
+body {
+  background: #0b0b0b;
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-    button {
-      padding: 12px 24px;
-      font-size: 18px;
-      cursor: pointer;
-      background: crimson;
-      border: none;
-      color: white;
-      border-radius: 6px;
-      margin: 10px;
-    }
+/* WRAPPER UTAMA */
+.app {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 360px;
+  margin: auto;
 
-    button.secondary { background: #444; }
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* tengah vertikal */
+  align-items: center;     /* tengah horizontal */
 
-    button:disabled {
-      background: #555;
-      cursor: not-allowed;
-    }
+  padding: 12px;
+  box-sizing: border-box;
+  text-align: center;
+}
 
-    .menu { margin-top: 60px; }
-    .game, .rulebook, .choose { display: none; }
+/* ================= DESKTOP ================= */
+h1 { color: crimson; }
 
-    .counter {
-      font-size: 64px;
-      margin: 20px 0;
-      color: #ff4444;
-    }
+button {
+  padding: 12px 24px;
+  font-size: 18px;
+  cursor: pointer;
+  background: crimson;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  margin: 8px 0;
+}
 
-    .result img {
-      max-width: 220px;
-      margin-top: 20px;
-      filter: drop-shadow(0 0 15px black);
-    }
+button.secondary { background: #444; }
 
-    .log {
-      margin-top: 20px;
-      background: #111;
-      padding: 15px;
-      border-radius: 8px;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-      font-size: 14px;
-    }
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
 
-    .choose button {
-      width: 220px;
-      font-size: 20px;
-    }
+.menu, .game, .rulebook, .choose {
+  display: none;
+  width: 100%;
+}
 
-    /* =========================
-   RESPONSIVE HP 9:16
-   ========================= */
-@media (max-width: 480px) and (orientation: portrait) {
+.counter {
+  font-size: 64px;
+  margin: 16px 0;
+  color: #ff4444;
+}
 
-  body {
-    padding: 12px;
-    font-size: 16px;
-  }
+.result img {
+  max-width: 220px;
+  margin-top: 16px;
+  filter: drop-shadow(0 0 15px black);
+}
+
+.log {
+  margin-top: 16px;
+  background: #111;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  max-height: 180px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+/* ================= HP 9:16 ================= */
+@media (max-width: 480px) {
 
   h1 {
     font-size: 28px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   h2 {
@@ -85,77 +93,95 @@
 
   button {
     width: 100%;
-    max-width: 320px;
     font-size: 18px;
     padding: 14px;
-    margin: 8px auto;
-    display: block;
   }
 
-  .menu,
-  .choose,
-  .game,
-  .rulebook {
-    margin-top: 20px;
-  }
-
-  /* Counter utama */
   .counter {
     font-size: 80px;
-    margin: 16px 0;
   }
 
-  /* Gambar hasil menang/kalah */
-  .result img {
-    max-width: 70%;
-    height: auto;
-  }
-
-  /* Pilih infeksi */
-  .choose img {
+  .choose img,
+  .result img,
+  .rulebook img {
     width: 100%;
     max-width: 220px;
     height: auto;
-  }
-
-  /* Log biar enak dibaca */
-  .log {
-    font-size: 14px;
-    max-width: 100%;
-    max-height: 180px;
-    overflow-y: auto;
-  }
-
-  /* Rulebook image */
-  .rulebook img {
-    width: 100%;
-    max-width: 360px;
-    height: auto;
+    display: block;
+    margin: auto;
   }
 }
 
-  </style>
+/* ================= FIX GAMBAR KEGEDEAN ================= */
+
+/* PILIH KARAKTER */
+.choose button {
+  background: none;
+  padding: 6px;
+}
+
+.choose img {
+  max-width: 160px;
+  width: 100%;
+  height: auto;
+}
+
+/* HASIL MENANG / KALAH */
+.result img {
+  max-width: 180px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 15px black);
+}
+
+/* RULEBOOK */
+.rulebook img {
+  max-width: 180px;
+  width: 100%;
+  height: auto;
+}
+
+/* IMAGE DI DALAM BUTTON */
+button img {
+  display: block;
+  margin: auto;
+}
+
+/* ================= HP 9:16 ================= */
+@media (max-width: 480px) {
+  .choose img,
+  .result img,
+  .rulebook img {
+    max-width: 140px;
+  }
+}
+
+</style>
 </head>
+
 <body>
+
+<div class="app">
 
 <h1>🦠 INFEKSI-0</h1>
 
 <!-- MENU -->
-<div class="menu" id="menu">
-  <button onclick="openRulebook()">📖 Rulebook</button><br>
+<div class="menu" id="menu" style="display:block">
+  <button onclick="openRulebook()">📖 Rulebook</button>
   <button onclick="openChoose()">🎮 Play Game</button>
 </div>
 
 <!-- PILIH INFEKSI -->
 <div class="choose" id="choose">
   <h2>Pilih Jenis Infeksi</h2>
-  <button onclick="selectInfection('cacing')">
-  <img src="cacingm.png" alt="Cacing" style="width:180px;">
-</button><br><br>
 
-<button onclick="selectInfection('tikus')">
-  <img src="tikusm.png" alt="Tikus" style="width:180px;">
-</button><br><br>
+  <button onclick="selectInfection('cacing')">
+    <img src="cacingm.png">
+  </button>
+
+  <button onclick="selectInfection('tikus')">
+    <img src="tikusm.png">
+  </button>
 
   <button class="secondary" onclick="backToMenu()">⬅ Kembali</button>
 </div>
@@ -163,7 +189,7 @@
 <!-- RULEBOOK -->
 <div class="rulebook" id="rulebook">
   <h2>📖 Rulebook</h2>
-  <img src="rulebook.png"><br><br>
+  <img src="rulebook.png">
   <button class="secondary" onclick="backToMenu()">⬅ Kembali</button>
 </div>
 
@@ -174,8 +200,8 @@
   <div class="counter" id="infection">5</div>
   <div class="result" id="result"></div>
 
-  <button id="rollBtn">Giliran Manusia 🎲</button><br><br>
-  <button class="secondary" onclick="backToMenu()">⬅ Kembali ke Menu</button>
+  <button id="rollBtn">Giliran Manusia 🎲</button>
+  <button class="secondary" onclick="backToMenu()">⬅ Menu</button>
 
   <div class="log" id="log">
     <b>Log:</b><br>
@@ -183,108 +209,108 @@
   </div>
 </div>
 
+</div>
+
 <script>
-  let infection = 5;
-  let selectedInfection = "cacing";
+let infection = 5;
+let selectedInfection = "cacing";
 
-  const infectionDiv = document.getElementById("infection");
-  const logDiv = document.getElementById("log");
-  const rollBtn = document.getElementById("rollBtn");
-  const resultDiv = document.getElementById("result");
+const infectionDiv = document.getElementById("infection");
+const logDiv = document.getElementById("log");
+const rollBtn = document.getElementById("rollBtn");
+const resultDiv = document.getElementById("result");
 
-  const menu = document.getElementById("menu");
-  const game = document.getElementById("game");
-  const rulebook = document.getElementById("rulebook");
-  const choose = document.getElementById("choose");
+const menu = document.getElementById("menu");
+const game = document.getElementById("game");
+const rulebook = document.getElementById("rulebook");
+const choose = document.getElementById("choose");
 
-  function openRulebook() {
-    menu.style.display = "none";
-    rulebook.style.display = "block";
-  }
+function openRulebook() {
+  hideAll();
+  rulebook.style.display = "block";
+}
 
-  function openChoose() {
-    menu.style.display = "none";
-    choose.style.display = "block";
-  }
+function openChoose() {
+  hideAll();
+  choose.style.display = "block";
+}
 
-  function selectInfection(type) {
-    selectedInfection = type;
-    choose.style.display = "none";
-    game.style.display = "block";
-    resetGame();
-  }
+function selectInfection(type) {
+  selectedInfection = type;
+  hideAll();
+  game.style.display = "block";
+  resetGame();
+}
 
-  function backToMenu() {
-    menu.style.display = "block";
-    game.style.display = "none";
-    rulebook.style.display = "none";
-    choose.style.display = "none";
-  }
+function backToMenu() {
+  hideAll();
+  menu.style.display = "block";
+}
 
-  function resetGame() {
-    infection = 5;
-    rollBtn.disabled = false;
+function hideAll() {
+  menu.style.display = "none";
+  game.style.display = "none";
+  rulebook.style.display = "none";
+  choose.style.display = "none";
+}
+
+function resetGame() {
+  infection = 5;
+  rollBtn.disabled = false;
+  infectionDiv.textContent = infection;
+  logDiv.innerHTML = "<b>Log:</b><br>Infeksi dimulai di 5<br>";
+  resultDiv.innerHTML = "";
+}
+
+function rollDice() {
+  return Math.floor(Math.random() * 6) + 1;
+}
+
+function moveValue(d) {
+  if (d <= 3) return 0;
+  if (d === 4) return 1;
+  if (d === 5) return 2;
+  return 3;
+}
+
+function addLog(text) {
+  logDiv.innerHTML += text + "<br>";
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+function checkGameEnd() {
+  if (infection <= 0) {
+    infection = 0;
     infectionDiv.textContent = infection;
-    logDiv.innerHTML = "<b>Log:</b><br>Infeksi dimulai di 5<br>";
-    resultDiv.innerHTML = "";
+    addLog("✅ MANUSIA MENANG!");
+    rollBtn.disabled = true;
+    resultDiv.innerHTML = `<img src="${selectedInfection}k.png">`;
+    return true;
   }
-
-  function rollDice() {
-    return Math.floor(Math.random() * 6) + 1;
-  }
-
-  function moveValue(dice) {
-    if (dice <= 3) return 0;
-    if (dice === 4) return 1;
-    if (dice === 5) return 2;
-    if (dice === 6) return 3;
-  }
-
-  function addLog(text) {
-    logDiv.innerHTML += text + "<br>";
-    logDiv.scrollTop = logDiv.scrollHeight;
-  }
-
-  function checkGameEnd() {
-    if (infection <= 0) {
-      infection = 0;
-      infectionDiv.textContent = infection;
-      addLog("✅ MANUSIA MENANG!");
-      rollBtn.disabled = true;
-      resultDiv.innerHTML =
-        `<img src="${selectedInfection}k.png">`;
-      return true;
-    }
-
-    if (infection >= 10) {
-      infection = 10;
-      infectionDiv.textContent = infection;
-      addLog("❌ MANUSIA KALAH!");
-      rollBtn.disabled = true;
-      resultDiv.innerHTML =
-        `<img src="${selectedInfection}m.png">`;
-      return true;
-    }
-    return false;
-  }
-
-  rollBtn.onclick = () => {
-    let diceHuman = rollDice();
-    let moveHuman = moveValue(diceHuman);
-    infection -= moveHuman;
-
-    addLog(`🎲 Manusia lempar ${diceHuman} → Infeksi mundur ${moveHuman}`);
+  if (infection >= 10) {
+    infection = 10;
     infectionDiv.textContent = infection;
-    if (checkGameEnd()) return;
+    addLog("❌ MANUSIA KALAH!");
+    rollBtn.disabled = true;
+    resultDiv.innerHTML = `<img src="${selectedInfection}m.png">`;
+    return true;
+  }
+  return false;
+}
 
-    let diceInfection = rollDice();
-    let moveInfection = moveValue(diceInfection);
-    infection += moveInfection;
+rollBtn.onclick = () => {
+  let dh = rollDice();
+  infection -= moveValue(dh);
+  addLog(`🎲 Manusia ${dh}`);
+  infectionDiv.textContent = infection;
+  if (checkGameEnd()) return;
 
-    addLog(`🦠 Infeksi lempar ${diceInfection} → Infeksi maju ${moveInfection}`);
-    infectionDiv.textContent = infection;
-    checkGameEnd();
-  };
+  let di = rollDice();
+  infection += moveValue(di);
+  addLog(`🦠 Infeksi ${di}`);
+  infectionDiv.textContent = infection;
+  checkGameEnd();
+};
 </script>
 
 </body>
