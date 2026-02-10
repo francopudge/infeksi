@@ -1,317 +1,356 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>INFEKSI-0</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFEKSI-0</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        /* Pengaturan Dasar */
+        * { box-sizing: border-box; }
 
-<style>
-body {
-  background: #0b0b0b;
-  color: #e0e0e0;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+        body {
+            background: #1a0f0f;
+            color: #e0d0c0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        /* --- LOADING SCREEN --- */
+        #loading-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #1a0f0f;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-logo {
+            width: 120px;
+            filter: drop-shadow(0 0 8px #ff0000);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        /* --- GAME CONTAINER --- */
+        .game-container {
+            background: rgba(0, 0, 0, 0.85);
+            border: 3px solid #631010;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #ff000033;
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .main-logo {
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 5px #ff0000);
+        }
+
+        .end-game-img {
+            width: 80px;
+            height: auto;
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            animation: pulse 1s infinite alternate;
+        }
+
+        /* Game Mechanics UI */
+        .stats { font-size: 1.2rem; margin: 15px 0; font-weight: bold; }
+        .track {
+            background: #333;
+            height: 20px; /* Diperkecil sedikit agar marker lebih menonjol */
+            position: relative;
+            margin: 30px 0;
+            border-radius: 15px;
+            border: 1px solid #777;
+        }
+
+        /* PERUBAHAN DI SINI: Menggunakan Gambar Sebagai Penanda */
+        #marker{
+    position:absolute;
+    width:30px;
+    height:30px;
+    background:url('penandainfeksi.png') no-repeat center center;
+    background-size:contain;
+    top:0px;
+    transition:left 0.4s;
 }
 
-/* WRAPPER UTAMA */
-.app {
-  min-height: 100vh;
-  width: 100%;
-  max-width: 360px;
-  margin: auto;
+        .labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: #aaa; }
+        
+        button {
+            background: #631010;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-family: inherit;
+            transition: 0.3s;
+            margin-bottom: 10px;
+            touch-action: manipulation;
+        }
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* tengah vertikal */
-  align-items: center;     /* tengah horizontal */
+        button:active { transform: scale(0.98); }
+        button:disabled { background: #333; opacity: 0.6; }
+        
+        #log { 
+            font-size: 0.9rem; 
+            color: #ffcccc; 
+            margin-top: 15px; 
+            height: 120px; 
+            overflow-y: auto; 
+            border-top: 1px solid #333; 
+            padding-top: 10px;
+            line-height: 1.4;
+        }
 
-  padding: 12px;
-  box-sizing: border-box;
-  text-align: center;
+        /* Animasi */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .screen { display: none; }
+        .active { display: flex; flex-direction: column; }
+
+        .music-ctrl {
+            background: #222;
+            border: 1px solid #444;
+            padding: 5px;
+            font-size: 0.7rem;
+            margin-top: 10px;
+        }
+
+        .number-board{
+    display:grid;
+    grid-template-columns: repeat(11,1fr);
+    gap:3px;
+    margin:20px 0;
+    position:relative;
 }
 
-/* ================= DESKTOP ================= */
-h1 { color: crimson; }
-
-button {
-  padding: 12px 24px;
-  font-size: 18px;
-  cursor: pointer;
-  background: crimson;
-  border: none;
-  color: white;
-  border-radius: 6px;
-  margin: 8px 0;
+.number-cell{
+    background:#222;
+    border:1px solid #631010;
+    padding:8px 0;
+    font-size:0.7rem;
+    border-radius:4px;
 }
 
-button.secondary { background: #444; }
 
-button:disabled {
-  background: #555;
-  cursor: not-allowed;
-}
 
-.menu, .game, .rulebook, .choose {
-  display: none;
-  width: 100%;
-}
-
-.counter {
-  font-size: 64px;
-  margin: 16px 0;
-  color: #ff4444;
-}
-
-.result img {
-  max-width: 220px;
-  margin-top: 16px;
-  filter: drop-shadow(0 0 15px black);
-}
-
-.log {
-  margin-top: 16px;
-  background: #111;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  max-height: 180px;
-  overflow-y: auto;
-  text-align: left;
-}
-
-/* ================= HP 9:16 ================= */
-@media (max-width: 480px) {
-
-  h1 {
-    font-size: 28px;
-    margin-bottom: 12px;
-  }
-
-  h2 {
-    font-size: 22px;
-  }
-
-  button {
-    width: 100%;
-    font-size: 18px;
-    padding: 14px;
-  }
-
-  .counter {
-    font-size: 80px;
-  }
-
-  .choose img,
-  .result img,
-  .rulebook img {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
-    display: block;
-    margin: auto;
-  }
-}
-
-/* ================= FIX GAMBAR KEGEDEAN ================= */
-
-/* PILIH KARAKTER */
-.choose button {
-  background: none;
-  padding: 6px;
-}
-
-.choose img {
-  max-width: 160px;
-  width: 100%;
-  height: auto;
-}
-
-/* HASIL MENANG / KALAH */
-.result img {
-  max-width: 180px;
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 0 15px black);
-}
-
-/* RULEBOOK */
-.rulebook img {
-  max-width: 180px;
-  width: 100%;
-  height: auto;
-}
-
-/* IMAGE DI DALAM BUTTON */
-button img {
-  display: block;
-  margin: auto;
-}
-
-/* ================= HP 9:16 ================= */
-@media (max-width: 480px) {
-  .choose img,
-  .result img,
-  .rulebook img {
-    max-width: 140px;
-  }
-}
-
-</style>
+    </style>
 </head>
-
 <body>
 
-<div class="app">
+<audio id="bgm" src="Shiki OP 1 [Blu-Ray].mp3" loop></audio>
 
-<h1>🦠 INFEKSI-0</h1>
-
-<!-- MENU -->
-<div class="menu" id="menu" style="display:block">
-  <button onclick="openRulebook()">📖 Rulebook</button>
-  <button onclick="openChoose()">🎮 Play Game</button>
+<div id="loading-screen">
+    <img src="logo.png" alt="Logo" class="loader-logo">
+    <div style="margin-top:20px; letter-spacing: 3px; color: #ff3333;">LOADING...</div>
 </div>
 
-<!-- PILIH INFEKSI -->
-<div class="choose" id="choose">
-  <h2>Pilih Jenis Infeksi</h2>
+<div class="game-container">
+    <div id="main-menu" class="screen active">
+    <img src="logo.png" alt="INFEKSI-0 Logo" class="main-logo">
+    <div style="margin-bottom: 20px; font-size: 0.75rem; color: #aaa; border-bottom: 1px solid #631010; padding-bottom: 15px;">
+        <div style="display: flex; justify-content: space-around;">
+            <span>👤 1 Player</span>
+            <span>🔞 13+</span>
+            <span>🕒 5m-10m</span>
+        </div>
+    </div>
+    
+    <button onclick="showScreen('game-screen')">PLAY GAME</button>
+    <button onclick="showScreen('rulebook-screen')">RULEBOOK</button>
+    
+    <button onclick="window.location.href='https://francopudge.github.io/game/'" style="background: #4a0e0e; border: 1px solid #ff0000;">KGAME</button>
+</div>
+    <div id="rulebook-screen" class="screen">
+        <h2>PANDUAN</h2>
+        <div style="margin: 15px 0;">
+            <img src="rulebook.png" alt="Panduan Bermain" style="width: 250px; height: auto; border: 1px solid #631010; border-radius: 5px;">
+        </div>
+        <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 20px;">Kalahkan infeksi sebelum mencapai angka 10.</p>
+        <button onclick="showScreen('main-menu')">KEMBALI</button>
+    </div>
 
-  <button onclick="selectInfection('cacing')">
-    <img src="cacingm.png">
-  </button>
+    <div id="game-screen" class="screen">
+        <h1>INFEKSI-0</h1>
+        
+        <button class="music-ctrl" id="musicBtn" onclick="toggleMusic()">🎵 PLAY MUSIC</button>
 
-  <button onclick="selectInfection('tikus')">
-    <img src="tikusm.png">
-  </button>
-
-  <button class="secondary" onclick="backToMenu()">⬅ Kembali</button>
+        <div class="stats">Status: <span id="val">5</span></div>
+        
+        <div class="labels">
+            <span>MANUSIA (0)</span>
+            <span>INFEKSI (10)</span>
+        </div>
+        <div class="number-board" id="board">
+    <div id="marker"></div>
 </div>
 
-<!-- RULEBOOK -->
-<div class="rulebook" id="rulebook">
-  <h2>📖 Rulebook</h2>
-  <img src="rulebook.png">
-  <button class="secondary" onclick="backToMenu()">⬅ Kembali</button>
-</div>
-
-<!-- GAME -->
-<div class="game" id="game">
-  <p>Tekan infeksi ke <b>0</b> sebelum mencapai <b>10</b></p>
-
-  <div class="counter" id="infection">5</div>
-  <div class="result" id="result"></div>
-
-  <button id="rollBtn">Giliran Manusia 🎲</button>
-  <button class="secondary" onclick="backToMenu()">⬅ Menu</button>
-
-  <div class="log" id="log">
-    <b>Log:</b><br>
-    Infeksi dimulai di 5<br>
-  </div>
-</div>
-
+        <div id="turn-display" style="margin-bottom:10px;">Giliran: <strong>Manusia</strong></div>
+        <button id="rollBtn">LEMPAR DADU</button>
+        
+        <div id="log">Siap bermain?</div>
+        
+        <button style="background:#444; font-size:0.8rem; margin-top:10px;" onclick="location.reload()">RESTART</button>
+    </div>
 </div>
 
 <script>
 let infection = 5;
-let selectedInfection = "cacing";
+let isPlayerTurn = true;
 
-const infectionDiv = document.getElementById("infection");
-const logDiv = document.getElementById("log");
-const rollBtn = document.getElementById("rollBtn");
-const resultDiv = document.getElementById("result");
+const marker = document.getElementById('marker');
+const valDisplay = document.getElementById('val');
+const log = document.getElementById('log');
+const rollBtn = document.getElementById('rollBtn');
+const turnDisplay = document.getElementById('turn-display');
+const bgm = document.getElementById('bgm');
+const musicBtn = document.getElementById('musicBtn');
+const board = document.getElementById('board');
 
-const menu = document.getElementById("menu");
-const game = document.getElementById("game");
-const rulebook = document.getElementById("rulebook");
-const choose = document.getElementById("choose");
-
-function openRulebook() {
-  hideAll();
-  rulebook.style.display = "block";
+/* =========================
+   BUAT PAPAN ANGKA 0–10
+========================= */
+for(let i = 0; i <= 10; i++){
+    const cell = document.createElement('div');
+    cell.className = 'number-cell';
+    cell.innerText = i;
+    board.appendChild(cell);
 }
 
-function openChoose() {
-  hideAll();
-  choose.style.display = "block";
+/* =========================
+   LOADING SCREEN
+========================= */
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loading-screen');
+    setTimeout(() => {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 500);
+    }, 1200);
+
+    updateUI(); // ⬅️ sekarang AMAN
+});
+
+/* =========================
+   MUSIC
+========================= */
+function toggleMusic() {
+    if (bgm.paused) {
+        bgm.play();
+        musicBtn.innerText = "⏸ PAUSE MUSIC";
+    } else {
+        bgm.pause();
+        musicBtn.innerText = "🎵 PLAY MUSIC";
+    }
 }
 
-function selectInfection(type) {
-  selectedInfection = type;
-  hideAll();
-  game.style.display = "block";
-  resetGame();
+/* =========================
+   SCREEN SWITCH
+========================= */
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+
+    if(screenId === 'game-screen'){
+        setTimeout(updateUI, 50); // biar marker selalu pas
+    }
 }
 
-function backToMenu() {
-  hideAll();
-  menu.style.display = "block";
+/* =========================
+   UPDATE UI
+========================= */
+function updateUI() {
+    valDisplay.innerText = infection;
+
+    const cells = document.querySelectorAll('.number-cell');
+    const targetCell = cells[infection];
+
+    if (targetCell) {
+        marker.style.left =
+            targetCell.offsetLeft +
+            (targetCell.offsetWidth / 2) -
+            (marker.offsetWidth / 2) + "px";
+    }
+
+    if (infection <= 0) {
+        log.innerHTML = `<img src="cacingk.png" class="end-game-img"><h2 style="color:#00ff00">MENANG!</h2>`;
+        rollBtn.disabled = true;
+    } 
+    else if (infection >= 10) {
+        log.innerHTML = `<img src="cacingm.png" class="end-game-img"><h2 style="color:#ff0000">KALAH!</h2>`;
+        rollBtn.disabled = true;
+    }
 }
 
-function hideAll() {
-  menu.style.display = "none";
-  game.style.display = "none";
-  rulebook.style.display = "none";
-  choose.style.display = "none";
+/* =========================
+   GAME LOGIC
+========================= */
+function calculateMove(dice) {
+    return dice <= 3 ? 0 : dice - 3;
 }
 
-function resetGame() {
-  infection = 5;
-  rollBtn.disabled = false;
-  infectionDiv.textContent = infection;
-  logDiv.innerHTML = "<b>Log:</b><br>Infeksi dimulai di 5<br>";
-  resultDiv.innerHTML = "";
-}
+async function playTurn() {
+    if (!isPlayerTurn) return;
 
-function rollDice() {
-  return Math.floor(Math.random() * 6) + 1;
-}
-
-function moveValue(d) {
-  if (d <= 3) return 0;
-  if (d === 4) return 1;
-  if (d === 5) return 2;
-  return 3;
-}
-
-function addLog(text) {
-  logDiv.innerHTML += text + "<br>";
-  logDiv.scrollTop = logDiv.scrollHeight;
-}
-
-function checkGameEnd() {
-  if (infection <= 0) {
-    infection = 0;
-    infectionDiv.textContent = infection;
-    addLog("✅ MANUSIA MENANG!");
     rollBtn.disabled = true;
-    resultDiv.innerHTML = `<img src="${selectedInfection}k.png">`;
-    return true;
-  }
-  if (infection >= 10) {
-    infection = 10;
-    infectionDiv.textContent = infection;
-    addLog("❌ MANUSIA KALAH!");
-    rollBtn.disabled = true;
-    resultDiv.innerHTML = `<img src="${selectedInfection}m.png">`;
-    return true;
-  }
-  return false;
+
+    const pDice = Math.floor(Math.random() * 6) + 1;
+    const pMove = calculateMove(pDice);
+    infection = Math.max(0, infection - pMove);
+
+    log.innerHTML = `Anda 🎲 <b>${pDice}</b> (Mundur ${pMove})`;
+    updateUI();
+
+    if (infection <= 0) return;
+
+    isPlayerTurn = false;
+    turnDisplay.innerHTML = "Giliran: <span style='color:red'>Infeksi</span>";
+
+    setTimeout(() => {
+        const aiDice = Math.floor(Math.random() * 6) + 1;
+        const aiMove = calculateMove(aiDice);
+        infection = Math.min(10, infection + aiMove);
+
+        log.innerHTML += `<br>Infeksi 🎲 <b>${aiDice}</b> (Maju ${aiMove})`;
+        updateUI();
+
+        if (infection < 10) {
+            isPlayerTurn = true;
+            rollBtn.disabled = false;
+            turnDisplay.innerHTML = "Giliran: <b>Manusia</b>";
+        }
+    }, 1000);
 }
 
-rollBtn.onclick = () => {
-  let dh = rollDice();
-  infection -= moveValue(dh);
-  addLog(`🎲 Manusia ${dh}`);
-  infectionDiv.textContent = infection;
-  if (checkGameEnd()) return;
-
-  let di = rollDice();
-  infection += moveValue(di);
-  addLog(`🦠 Infeksi ${di}`);
-  infectionDiv.textContent = infection;
-  checkGameEnd();
-};
+rollBtn.addEventListener('click', playTurn);
 </script>
+
 
 </body>
 </html>
